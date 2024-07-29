@@ -10,10 +10,10 @@ using Microsoft.SemanticKernel.Planning.Handlebars;
 // Create a new kernel
 var builder = Kernel.CreateBuilder();
 builder.AddAzureOpenAIChatCompletion(
-    "<YOUR_DEPLOYMENT_NAME>",
-    "<YOUR_AOAI_ENDPOINT>",
-    "<YOUR_AOAI_API_KEY>",
-    "<SERVICE_ID>");
+    "jolgukwestus",
+    "https://jolgukwestus.openai.azure.com/",
+    "2b0c0f7f9fa842f19bd5c462f13a8074",
+    "jolgukwestus");
 var kernel = builder.Build();
 
 
@@ -21,7 +21,7 @@ var kernel = builder.Build();
 // import plugins
 kernel.ImportPluginFromType<SearchPlugin>();
 kernel.ImportPluginFromType<ConversationSummaryPlugin>();
-var prompts = kernel.ImportPluginFromPromptDirectory("prompts");
+var prompts = kernel.ImportPluginFromPromptDirectory("C:\\ianweek6update3\Write\aibootcamp-week6\\prompts");
 //-------------------------------
 
 
