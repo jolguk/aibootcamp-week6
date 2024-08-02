@@ -29,3 +29,4 @@ public class SearchPlugin
         return bingResult.ToString();
     }
 }
+

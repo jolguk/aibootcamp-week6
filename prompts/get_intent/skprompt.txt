@@ -1,6 +1,7 @@
 <message role="system">Identify the user's intent. Return one of the following values:
 
 WriteEmail - If the user wants to write an excuse email to their boss.
+Book - If the user wants to book a restaurant
 Unknown - If the user's intent matches none of the above.</message>
 
 for example:
@@ -9,5 +10,10 @@ for example:
 
 <message role="user">Learn about advanced physics</message>
 <message role="assistant">Unknown</message>
+
+
+<message role="user">Book a table</message>
+<message role="assistant">Book</message>
+
 
 <message role="user">{{$input}}</message>

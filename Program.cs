@@ -10,18 +10,19 @@ using Microsoft.SemanticKernel.Planning.Handlebars;
 // Create a new kernel
 var builder = Kernel.CreateBuilder();
 builder.AddAzureOpenAIChatCompletion(
-    "jolgukwestus",
-    "https://jolgukwestus.openai.azure.com/",
-    "2b0c0f7f9fa842f19bd5c462f13a8074",
-    "jolgukwestus");
+    "gpt-4o",
+    "https://bootcampsweden.openai.azure.com//",
+    "188d05bf71ae48a58abd9b85c6fb1b88",
+    "gpt-4o");
 var kernel = builder.Build();
 
 
 //-------------------------------
 // import plugins
 kernel.ImportPluginFromType<SearchPlugin>();
+kernel.ImportPluginFromType<RestaurantBookingPlugin>();
 kernel.ImportPluginFromType<ConversationSummaryPlugin>();
-var prompts = kernel.ImportPluginFromPromptDirectory("C:\\ianweek6update3\Write\aibootcamp-week6\\prompts");
+var prompts = kernel.ImportPluginFromPromptDirectory("C:\\ianweek6update3\\aibootcamp-week6\\prompts");
 //-------------------------------
 
 
@@ -30,6 +31,15 @@ var prompts = kernel.ImportPluginFromPromptDirectory("C:\\ianweek6update3\Write\
 var web_search_result = await SearchWebForFootballMatchDateAndTime();
 var day_and_time = await GetMatchDateAndTime(web_search_result);
 var excuse_email1 = await GetExcuseEmail(day_and_time);
+
+// call the restaurant booking plugin
+// call the RestaurantBookingPlugin
+var restaurant_booking = await kernel.InvokeAsync<string>("RestaurantBookingPlugin", "restaurant_booking", new() {
+    { "restaurant_name", "The Fat Duck" },
+    { "number_of_people", 4 },
+    { "date", "2022-12-25" },
+    { "time", "19:00" }
+});
 
 //execute with functions
 var excuse_email2 = await ExecuteWithFunctions();
@@ -57,6 +67,10 @@ async Task<string> SearchWebForFootballMatchDateAndTime(string football_team = "
 }
 
 
+
+
+
+
 // CHALLENGE 2.1
 // https://learn.microsoft.com/en-us/training/modules/create-plugins-semantic-kernel/
 // Write a semantic function that gets the date and time of the next Manchester United football match. 
@@ -71,6 +85,25 @@ async Task<string> GetMatchDateAndTime(string web_search_result)
 
     Console.WriteLine(day_and_time);
     return day_and_time;
+}
+
+//Write a semantic function that books a restaurant table for a specific date and time.
+//The function takes as input the restaurant name, the number of people, the date, and the time.
+//The function returns a booking confirmation.
+async Task<string> BookRestaurant(string restaurant_name, int number_of_people, string date, string time)
+{
+    var booking_confirmation = await kernel.InvokeAsync<string>("RestaurantBookingPlugin", 
+    "restaurant_booking",
+    new() {
+            { "restaurant_name", restaurant_name },
+            { "number_of_people", number_of_people },
+            { "date", date },
+            { "time", time }
+        }
+    );
+
+    Console.WriteLine(booking_confirmation);
+    return booking_confirmation;
 }
 
 
@@ -89,6 +122,9 @@ async Task<string> GetExcuseEmail(string day_and_time)
     Console.WriteLine(excuse_email);
     return excuse_email;
 }
+
+
+
 
 
 // CHALLENGE 2.2
@@ -115,11 +151,25 @@ async Task<string> ExecuteWithFunctions()
             var day_and_time = await GetMatchDateAndTime(web_search_result);
             email = await GetExcuseEmail(day_and_time);
             break;
+        case "Book":
+            Console.WriteLine("Enter the restaurant name:");
+            var restaurant_name = Console.ReadLine();
+
+            Console.WriteLine("Enter the number of people:");
+            var number_of_people = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Enter the date (YYYY-MM-DD):");
+            var date = Console.ReadLine();
+
+            Console.WriteLine("Enter the time (HH:MM):");
+            var time = Console.ReadLine();
+
+            email = await BookRestaurant(restaurant_name, number_of_people, date, time);
+            break;
         default:
             Console.WriteLine("Sorry, I can't help with that.");
             break;
     }
-
     return email;
 }
 
