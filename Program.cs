@@ -28,9 +28,9 @@ var prompts = kernel.ImportPluginFromPromptDirectory("C:\\ianweek6update3\\aiboo
 
 //-------------------------------
 // execute chained plugins
-var web_search_result = await SearchWebForFootballMatchDateAndTime();
-var day_and_time = await GetMatchDateAndTime(web_search_result);
-var excuse_email1 = await GetExcuseEmail(day_and_time);
+//var web_search_result = await SearchWebForFootballMatchDateAndTime();
+//var day_and_time = await GetMatchDateAndTime(web_search_result);
+//var excuse_email1 = await GetExcuseEmail(day_and_time);
 
 // call the restaurant booking plugin
 // call the RestaurantBookingPlugin
@@ -45,7 +45,7 @@ var restaurant_booking = await kernel.InvokeAsync<string>("RestaurantBookingPlug
 var excuse_email2 = await ExecuteWithFunctions();
 
 //  execute with intelligent planners 
-var excuse_email3 = await ExecuteWithIntelligentPlanners();
+//var excuse_email3 = await ExecuteWithIntelligentPlanners();
 //-------------------------------
 
 
